@@ -1,0 +1,4 @@
+RDP:
+  kalina - 120
+SSH
+  kalina - 21
