@@ -1,4 +1,19 @@
-RDP:
-  kalina - 120
-SSH
-  kalina - 21
+# Sprawdzenie wersji Javy
+$javaVersion = java -version 2>&1 | Select-String -Pattern '"(\d+)' | ForEach-Object { $_.Matches.Groups[1].Value }
+
+if ($javaVersion -and [int]$javaVersion -ge 18) {
+    Write-Host "Java w wersji $javaVersion jest już zainstalowana."
+} else {
+    Write-Host "Java 18 lub wyższa nie jest zainstalowana. Pobieranie i instalacja..."
+
+    # Pobranie instalatora Javy
+    $javaUrl = "https://javadl.oracle.com/webapps/download/AutoDL?BundleId=251656_7ed26d28139143f38c58992680c214a5"
+    $javaInstaller = "$env:TEMP\java_installer.exe"
+
+    Invoke-WebRequest -Uri $javaUrl -OutFile $javaInstaller
+
+    # Instalacja Javy w trybie cichym
+    Start-Process -FilePath $javaInstaller -ArgumentList "/s" -Wait -NoNewWindow
+
+    Write-Host "Instalacja zakończona. Sprawdź wersję Javy, wpisując `java -version`."
+}
